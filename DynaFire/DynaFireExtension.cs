@@ -18,7 +18,8 @@ namespace DynaFire
     {
 
         private ObservableCollection<Shortcut> _nodeNames = new ObservableCollection<Shortcut>();
-        public ObservableCollection<Shortcut> NodeShortcuts;
+        private string ShortcutsFileName = "shortcuts.txt";
+        public ObservableCollection<Shortcut> NodeShortcuts
         {
             get
             {
@@ -82,16 +83,19 @@ namespace DynaFire
         {
             try
             {
-                System.IO.StreamReader stream = new System.IO.StreamReader("shortcuts.csv");
-                while (!stream.EndOfStream)
+                using (System.IO.StreamReader stream = new System.IO.StreamReader(ShortcutsFileName))
                 {
-                    string[] shortcutParts = stream.ReadLine().Split(new char[1] { '|' });
-                    string nodeName = shortcutParts[1];
-                    Shortcut target = NodeShortcuts.FirstOrDefault(s => s.NodeName.Equals(nodeName));
-                    if(target != null) {
-                        target.Keys = shortcutParts[0];
+                    while (!stream.EndOfStream)
+                    {
+                        string[] shortcutParts = stream.ReadLine().Split(new char[1] { '|' });
+                        string nodeName = shortcutParts[1];
+                        Shortcut target = NodeShortcuts.FirstOrDefault(s => s.NodeName.Equals(nodeName));
+                        if(target != null) {
+                            target.Keys = shortcutParts[0];
+                        }
                     }
                 }
+
             }
             catch(Exception e)
             {
@@ -135,6 +139,24 @@ namespace DynaFire
         private string GetVal(ObservableCollection<Shortcut> collection, string key) {
             Shortcut target = collection.FirstOrDefault(s => s.Keys.Equals(key));
             return target != null ? target.NodeName : null;
+        }
+
+        private void WriteShortcutsToFile() {
+            // First clear all the existing contents so we don't write duplicates
+            System.IO.File.WriteAllText(ShortcutsFileName, string.Empty);
+
+            // Then write all shortcuts with non-empty keys to the File
+            using (System.IO.StreamWriter shortcutsFile = new System.IO.StreamWriter(ShortcutsFileName))
+            {
+                foreach (Shortcut shortcut in NodeShortcuts)
+                {
+                    if (!shortcut.Keys.Equals(""))
+                    {
+                      string shortcut = shortcut.Keys + "|" + shortcut.NodeName + "|";
+                      file.WriteLine(shortcut);
+                    }
+                }
+            }
         }
 
         public void Shutdown()
