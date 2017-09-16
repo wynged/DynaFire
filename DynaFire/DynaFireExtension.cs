@@ -18,7 +18,7 @@ namespace DynaFire
     {
 
         private ObservableCollection<Shortcut> _nodeNames = new ObservableCollection<Shortcut>();
-        public ObservableCollection<Shortcut> NodeShortcuts;
+        public ObservableCollection<Shortcut> NodeShortcuts
         {
             get
             {
@@ -83,11 +83,19 @@ namespace DynaFire
             }
         }
 
-        private void ReadFile()
+        internal void ClearKeys()
+        {
+            foreach(Shortcut sc in NodeShortcuts)
+            {
+                sc.Keys = "";
+            }
+        }
+
+        internal  void ReadFile()
         {
             try
             {
-                System.IO.StreamReader stream = new System.IO.StreamReader("shortcuts.csv");
+                System.IO.StreamReader stream = new System.IO.StreamReader("shortcuts.txt");
                 while (!stream.EndOfStream)
                 {
                     string[] shortcutParts = stream.ReadLine().Split(new char[1] { '|' });
@@ -134,7 +142,7 @@ namespace DynaFire
                     }
 
                     string nodeName = GetVal(NodeShortcuts, key);
-                    if (nodeName != null))
+                    if (nodeName != null)
                     {
                         DynamoViewModel vm = view.DataContext as DynamoViewModel;
                         vm.Model.ExecuteCommand(new CreateNodeCommand(Guid.NewGuid().ToString(), nodeName, 0, 0, false, true));
@@ -158,17 +166,5 @@ namespace DynaFire
 
         }
 
-        public DelegateCommand TryOKCommand = new DelegateCommand(TryOK);
-        public DelegateCommand CancelCommand = new DelegateCommand(Cancel);
-
-        private static void Cancel(object obj)
-        {
-
-        }
-
-        private static void TryOK(object obj)
-        {
-
-        }
     }
 }

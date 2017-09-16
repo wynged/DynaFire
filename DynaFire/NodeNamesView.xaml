@@ -5,7 +5,7 @@
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
             xmlns:local="clr-namespace:DynaFire"
             mc:Ignorable="d" 
-            d:DesignHeight="300" d:DesignWidth="200"
+            d:DesignHeight="300" Width="200"
             xmlns:ui="clr-namespace:Dynamo.UI;assembly=DynamoCoreWpf"
         >
     <Window.Resources>
@@ -29,15 +29,15 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBox Text="{Binding Path=Key}" Width="30"/>
+                        <TextBox Text="{Binding Path=Keys}" Width="30"/>
                         <TextBlock Text="{Binding Path= NodeName}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
         <DockPanel Grid.Row="2" LastChildFill="True">
-            <Button Command="{Binding CancelCommand}" Content="Cancel" DockPanel.Dock="Left" Width="50" IsCancel="True"/>
-            <Button Command="{Binding TryOKCommand}" Content="OK" DockPanel.Dock="Left"/>
+            <Button Command="{Binding CancelCommand}" Content="Cancel" DockPanel.Dock="Left" Width="50" IsCancel="True" Click="Button_Click_Cancel"/>
+            <Button Command="{Binding TryOKCommand}" Content="SaveSettings" DockPanel.Dock="Left" IsCancel="True" Click="Button_Click_Save"/>
         </DockPanel>
     </Grid>
 </Window>

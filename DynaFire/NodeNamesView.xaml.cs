@@ -28,5 +28,16 @@ namespace DynaFire
             DataContext = dynaFire;
             InitializeComponent();
         }
+
+        private void Button_Click_Save(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click_Cancel(object sender, RoutedEventArgs e)
+        {
+            model.ClearKeys();
+            model.ReadFile();
+        }
     }
 }
