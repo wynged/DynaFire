@@ -18,6 +18,10 @@ namespace DynaFire
     {
 
         private ObservableCollection<Shortcut> _nodeNames = new ObservableCollection<Shortcut>();
+<<<<<<< HEAD
+=======
+        private string ShortcutsFileName = "shortcuts.txt";
+>>>>>>> 795e54a4d5f31c0fc25995b8f59ba8a253a29d34
         public ObservableCollection<Shortcut> NodeShortcuts
         {
             get
@@ -95,16 +99,24 @@ namespace DynaFire
         {
             try
             {
+<<<<<<< HEAD
                 System.IO.StreamReader stream = new System.IO.StreamReader("shortcuts.txt");
                 while (!stream.EndOfStream)
+=======
+                using (System.IO.StreamReader stream = new System.IO.StreamReader(ShortcutsFileName))
+>>>>>>> 795e54a4d5f31c0fc25995b8f59ba8a253a29d34
                 {
-                    string[] shortcutParts = stream.ReadLine().Split(new char[1] { '|' });
-                    string nodeName = shortcutParts[1];
-                    Shortcut target = NodeShortcuts.FirstOrDefault(s => s.NodeName.Equals(nodeName));
-                    if(target != null) {
-                        target.Keys = shortcutParts[0];
+                    while (!stream.EndOfStream)
+                    {
+                        string[] shortcutParts = stream.ReadLine().Split(new char[1] { '|' });
+                        string nodeName = shortcutParts[1];
+                        Shortcut target = NodeShortcuts.FirstOrDefault(s => s.NodeName.Equals(nodeName));
+                        if(target != null) {
+                            target.Keys = shortcutParts[0];
+                        }
                     }
                 }
+
             }
             catch(Exception e)
             {
@@ -154,6 +166,24 @@ namespace DynaFire
         private string GetVal(ObservableCollection<Shortcut> collection, string key) {
             Shortcut target = collection.FirstOrDefault(s => s.Keys.Equals(key));
             return target != null ? target.NodeName : null;
+        }
+
+        private void WriteShortcutsToFile() {
+            // First clear all the existing contents so we don't write duplicates
+            System.IO.File.WriteAllText(ShortcutsFileName, string.Empty);
+
+            // Then write all shortcuts with non-empty keys to the File
+            using (System.IO.StreamWriter shortcutsFile = new System.IO.StreamWriter(ShortcutsFileName))
+            {
+                foreach (Shortcut shortcut in NodeShortcuts)
+                {
+                    if (!shortcut.Keys.Equals(""))
+                    {
+                      string shortcut = shortcut.Keys + "|" + shortcut.NodeName + "|";
+                      file.WriteLine(shortcut);
+                    }
+                }
+            }
         }
 
         public void Shutdown()
