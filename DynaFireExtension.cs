@@ -28,15 +28,15 @@ namespace DynaFire
             set
             {
                 _nodeNames = value;
-
+                
             }
         }
-
+        
         public string Name
         {
             get
             {
-                return "DynaFire";
+                return "DynaFire"; 
             }
         }
 
@@ -55,12 +55,6 @@ namespace DynaFire
 
         DynamoView view;
         char? lastChar;
-
-        public void SaveAllShortcuts()
-        {
-            List<Shortcut> assignedShortcuts = NodeShortcuts.Where(s => s.Keys != string.IsNullOrEmpty);
-
-        }
 
         public void Loaded(ViewLoadedParams p)
         {
@@ -124,27 +118,9 @@ namespace DynaFire
 
         public void Startup(ViewStartupParams p)
         {
-            // Map.Add("CR", "Color Range");
-            // Map.Add("IN", "Input");
-            // Map.Add("OT", "SortIndexByValue@double[],bool");
-            ReadFile();
-        }
-
-        private void ReadFile()
-        {
-            try
-            {
-                System.IO.StreamReader stream = new System.IO.StreamReader("shortcuts.csv");
-                while (!stream.EndOfStream)
-                {
-                    string[] shortcutParts = stream.ReadLine().Split(new char[1] { '|' });
-                    Map.Add(shortcutParts[0], shortcutParts[1]);
-                }
-            }
-            catch(Exception e)
-            {
-                // haha
-            }
+            Map.Add("CR", "Color Range");
+            Map.Add("IN", "Input");
+            Map.Add("OT", "SortIndexByValue@double[],bool");
         }
 
         public DelegateCommand TryOKCommand = new DelegateCommand(TryOK);
