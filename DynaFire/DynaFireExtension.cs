@@ -18,10 +18,7 @@ namespace DynaFire
     {
 
         private ObservableCollection<Shortcut> _nodeNames = new ObservableCollection<Shortcut>();
-<<<<<<< HEAD
-=======
         private string ShortcutsFileName = "shortcuts.txt";
->>>>>>> 795e54a4d5f31c0fc25995b8f59ba8a253a29d34
         public ObservableCollection<Shortcut> NodeShortcuts
         {
             get
@@ -99,12 +96,7 @@ namespace DynaFire
         {
             try
             {
-<<<<<<< HEAD
-                System.IO.StreamReader stream = new System.IO.StreamReader("shortcuts.txt");
-                while (!stream.EndOfStream)
-=======
                 using (System.IO.StreamReader stream = new System.IO.StreamReader(ShortcutsFileName))
->>>>>>> 795e54a4d5f31c0fc25995b8f59ba8a253a29d34
                 {
                     while (!stream.EndOfStream)
                     {
@@ -168,7 +160,7 @@ namespace DynaFire
             return target != null ? target.NodeName : null;
         }
 
-        private void WriteShortcutsToFile() {
+        internal void WriteShortcutsToFile() {
             // First clear all the existing contents so we don't write duplicates
             System.IO.File.WriteAllText(ShortcutsFileName, string.Empty);
 
@@ -179,8 +171,8 @@ namespace DynaFire
                 {
                     if (!shortcut.Keys.Equals(""))
                     {
-                      string shortcut = shortcut.Keys + "|" + shortcut.NodeName + "|";
-                      file.WriteLine(shortcut);
+                      string shcut = shortcut.Keys + "|" + shortcut.NodeName + "|";
+                      shortcutsFile.WriteLine(shcut);
                     }
                 }
             }
