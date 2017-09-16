@@ -58,7 +58,7 @@ namespace DynaFire
 
         public void SaveAllShortcuts()
         {
-            List<Shortcut> assignedShortcuts = NodeShortcuts.Where(s => s.Keys != string.IsNullOrEmpty);
+            List<Shortcut> assignedShortcuts = NodeShortcuts.Where(s => String.IsNullOrEmpty(s.Keys)).ToList();
 
         }
 
@@ -70,8 +70,7 @@ namespace DynaFire
 
             SetNodeShortcuts();
 
-            NodeNamesView v = new NodeNamesView(this);
-            v.ShowDialog();
+            
         }
 
         private void SetNodeShortcuts()
@@ -88,7 +87,6 @@ namespace DynaFire
         {
             lastChar = null;
 
-            System.Windows.Forms.MessageBox.Show(System.Windows.Forms.Cursor.Position.ToString());
         }
 
         private void View_KeyDown(object sender, KeyEventArgs e)
@@ -107,6 +105,11 @@ namespace DynaFire
                 if (chars.Length == 1)
                 {
                     string key = lastChar.ToString() + chars[0].ToString();
+                    if (key == "KS")
+                    {
+                        NodeNamesView v = new NodeNamesView(this);
+                        v.ShowDialog();
+                    }
                     string val;
                     if (Map.TryGetValue(key, out val))
                     {
@@ -148,10 +151,16 @@ namespace DynaFire
         }
 
         public DelegateCommand TryOKCommand = new DelegateCommand(TryOK);
+        public DelegateCommand CancelCommand = new DelegateCommand(Cancel);
+
+        private static void Cancel(object obj)
+        {
+
+        }
 
         private static void TryOK(object obj)
         {
-            System.Windows.Forms.MessageBox.Show("ok clicked");
+
         }
     }
 }

@@ -35,9 +35,9 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <!--<DockPanel Grid.Row="2">
-            <Button Command="TryOKCommand" Content="OK" DockPanel.Dock="Left" Width="50"/>
-            <Button Command="Cancel" Content="Cancel" DockPanel.Dock="Right" Width="50"/>
-        </DockPanel>-->
+        <DockPanel Grid.Row="2" LastChildFill="True">
+            <Button Command="{Binding CancelCommand}" Content="Cancel" DockPanel.Dock="Left" Width="50" IsCancel="True"/>
+            <Button Command="{Binding TryOKCommand}" Content="OK" DockPanel.Dock="Left"/>
+        </DockPanel>
     </Grid>
 </Window>
