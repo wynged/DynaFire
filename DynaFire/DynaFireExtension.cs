@@ -56,6 +56,12 @@ namespace DynaFire
         DynamoView view;
         char? lastChar;
 
+        public void SaveAllShortcuts()
+        {
+            List<Shortcut> assignedShortcuts = NodeShortcuts.Where(s => s.Keys != string.IsNullOrEmpty);
+
+        }
+
         public void Loaded(ViewLoadedParams p)
         {
             view = p.DynamoWindow as DynamoView;
