@@ -17,8 +17,8 @@ namespace DynaFire
     public class DynaFireExtension : IViewExtension
     {
 
+        Dictionary<string, string> Map = new Dictionary<string, string>();
         private ObservableCollection<Shortcut> _nodeNames = new ObservableCollection<Shortcut>();
-        private string ShortcutsFileName = "shortcuts.txt";
         public ObservableCollection<Shortcut> NodeShortcuts
         {
             get
@@ -28,15 +28,15 @@ namespace DynaFire
             set
             {
                 _nodeNames = value;
-
+                
             }
         }
-
+        
         public string Name
         {
             get
             {
-                return "DynaFire";
+                return "DynaFire"; 
             }
         }
 
@@ -63,7 +63,6 @@ namespace DynaFire
             view.KeyUp += View_KeyUp;
 
             SetNodeShortcuts();
-            ReadFile();
 
             NodeNamesView v = new NodeNamesView(this);
             v.ShowDialog();
@@ -76,30 +75,6 @@ namespace DynaFire
             foreach( string name in  vm.SearchViewModel.Model.SearchEntries.Select(s => s.CreationName) )
             {
                 NodeShortcuts.Add(new Shortcut("", name));
-            }
-        }
-
-        private void ReadFile()
-        {
-            try
-            {
-                using (System.IO.StreamReader stream = new System.IO.StreamReader(ShortcutsFileName))
-                {
-                    while (!stream.EndOfStream)
-                    {
-                        string[] shortcutParts = stream.ReadLine().Split(new char[1] { '|' });
-                        string nodeName = shortcutParts[1];
-                        Shortcut target = NodeShortcuts.FirstOrDefault(s => s.NodeName.Equals(nodeName));
-                        if(target != null) {
-                            target.Keys = shortcutParts[0];
-                        }
-                    }
-                }
-
-            }
-            catch(Exception e)
-            {
-                // haha
             }
         }
 
@@ -126,34 +101,11 @@ namespace DynaFire
                 if (chars.Length == 1)
                 {
                     string key = lastChar.ToString() + chars[0].ToString();
-                    string nodeName = GetVal(NodeShortcuts, key);
-                    if (nodeName != null))
+                    string val;
+                    if (Map.TryGetValue(key, out val))
                     {
                         DynamoViewModel vm = view.DataContext as DynamoViewModel;
-                        vm.Model.ExecuteCommand(new CreateNodeCommand(Guid.NewGuid().ToString(), nodeName, 0, 0, false, true));
-                    }
-                }
-            }
-        }
-
-        private string GetVal(ObservableCollection<Shortcut> collection, string key) {
-            Shortcut target = collection.FirstOrDefault(s => s.Keys.Equals(key));
-            return target != null ? target.NodeName : null;
-        }
-
-        private void WriteShortcutsToFile() {
-            // First clear all the existing contents so we don't write duplicates
-            System.IO.File.WriteAllText(ShortcutsFileName, string.Empty);
-
-            // Then write all shortcuts with non-empty keys to the File
-            using (System.IO.StreamWriter shortcutsFile = new System.IO.StreamWriter(ShortcutsFileName))
-            {
-                foreach (Shortcut shortcut in NodeShortcuts)
-                {
-                    if (!shortcut.Keys.Equals(""))
-                    {
-                      string shortcut = shortcut.Keys + "|" + shortcut.NodeName + "|";
-                      file.WriteLine(shortcut);
+                        vm.Model.ExecuteCommand(new CreateNodeCommand(Guid.NewGuid().ToString(), val, 0, 0, false, true));
                     }
                 }
             }
@@ -166,7 +118,9 @@ namespace DynaFire
 
         public void Startup(ViewStartupParams p)
         {
-
+            Map.Add("CR", "Color Range");
+            Map.Add("IN", "Input");
+            Map.Add("OT", "SortIndexByValue@double[],bool");
         }
 
         public DelegateCommand TryOKCommand = new DelegateCommand(TryOK);
