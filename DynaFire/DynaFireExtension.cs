@@ -17,9 +17,8 @@ namespace DynaFire
     public class DynaFireExtension : IViewExtension
     {
 
-        Dictionary<string, string> Map = new Dictionary<string, string>();
         private ObservableCollection<Shortcut> _nodeNames = new ObservableCollection<Shortcut>();
-        public ObservableCollection<Shortcut> NodeShortcuts
+        public ObservableCollection<Shortcut> NodeShortcuts;
         {
             get
             {
@@ -69,6 +68,7 @@ namespace DynaFire
             view.KeyUp += View_KeyUp;
 
             SetNodeShortcuts();
+            ReadFile();
 
             
         }
@@ -80,6 +80,27 @@ namespace DynaFire
             foreach( string name in  vm.SearchViewModel.Model.SearchEntries.Select(s => s.CreationName) )
             {
                 NodeShortcuts.Add(new Shortcut("", name));
+            }
+        }
+
+        private void ReadFile()
+        {
+            try
+            {
+                System.IO.StreamReader stream = new System.IO.StreamReader("shortcuts.csv");
+                while (!stream.EndOfStream)
+                {
+                    string[] shortcutParts = stream.ReadLine().Split(new char[1] { '|' });
+                    string nodeName = shortcutParts[1];
+                    Shortcut target = NodeShortcuts.FirstOrDefault(s => s.NodeName.Equals(nodeName));
+                    if(target != null) {
+                        target.Keys = shortcutParts[0];
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                // haha
             }
         }
 
@@ -105,19 +126,26 @@ namespace DynaFire
                 if (chars.Length == 1)
                 {
                     string key = lastChar.ToString() + chars[0].ToString();
+
                     if (key == "KS")
                     {
                         NodeNamesView v = new NodeNamesView(this);
                         v.ShowDialog();
                     }
-                    string val;
-                    if (Map.TryGetValue(key, out val))
+
+                    string nodeName = GetVal(NodeShortcuts, key);
+                    if (nodeName != null))
                     {
                         DynamoViewModel vm = view.DataContext as DynamoViewModel;
-                        vm.Model.ExecuteCommand(new CreateNodeCommand(Guid.NewGuid().ToString(), val, 0, 0, false, true));
+                        vm.Model.ExecuteCommand(new CreateNodeCommand(Guid.NewGuid().ToString(), nodeName, 0, 0, false, true));
                     }
                 }
             }
+        }
+
+        private string GetVal(ObservableCollection<Shortcut> collection, string key) {
+            Shortcut target = collection.FirstOrDefault(s => s.Keys.Equals(key));
+            return target != null ? target.NodeName : null;
         }
 
         public void Shutdown()
@@ -127,27 +155,7 @@ namespace DynaFire
 
         public void Startup(ViewStartupParams p)
         {
-            // Map.Add("CR", "Color Range");
-            // Map.Add("IN", "Input");
-            // Map.Add("OT", "SortIndexByValue@double[],bool");
-            ReadFile();
-        }
 
-        private void ReadFile()
-        {
-            try
-            {
-                System.IO.StreamReader stream = new System.IO.StreamReader("shortcuts.csv");
-                while (!stream.EndOfStream)
-                {
-                    string[] shortcutParts = stream.ReadLine().Split(new char[1] { '|' });
-                    Map.Add(shortcutParts[0], shortcutParts[1]);
-                }
-            }
-            catch(Exception e)
-            {
-                // haha
-            }
         }
 
         public DelegateCommand TryOKCommand = new DelegateCommand(TryOK);
