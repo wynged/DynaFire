@@ -1,0 +1,11 @@
+DT|Date Time|
+FP|File Path|
+DP|Directory Path|
+CR|Color Range|
+LC|List.Create|
+AC|All Elements of Category|
+CA|Categories|
+OT|SortIndexByValue@double[],bool|
+CN|DSCore.Color.ByARGB@int,int,int,int|
+DC|Display.Display.ByGeometryColor@Autodesk.DesignScript.Geometry.Geometry,DSCore.Color|
+GE|Revit.Elements.Element.Geometry|

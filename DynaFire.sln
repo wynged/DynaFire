@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynaFire", "DynaFire\DynaFire.csproj", "{0F6001FE-40BC-4A00-A900-A9BABDACE3CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynaFire", "src\DynaFire\DynaFire.csproj", "{0F6001FE-40BC-4A00-A900-A9BABDACE3CC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A8D8A7A6-9EC7-43B2-97A4-B4CA8109DC55}"
+	ProjectSection(SolutionItems) = preProject
+		deploy\DynaFire_ViewExtensionDefinition.xml = deploy\DynaFire_ViewExtensionDefinition.xml
+		deploy\shortcuts.txt = deploy\shortcuts.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
