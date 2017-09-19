@@ -1,4 +1,4 @@
 <ViewExtensionDefinition>
-  <AssemblyPath>DynaFire\DynaFire.dll</AssemblyPath>
+  <AssemblyPath>DynaFire_bin\DynaFire.dll</AssemblyPath>
   <TypeName>DynaFire.DynaFireExtension</TypeName>
 </ViewExtensionDefinition>
