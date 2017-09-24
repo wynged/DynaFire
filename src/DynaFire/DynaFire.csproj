@@ -57,6 +57,7 @@
       <DependentUpon>NodeNamesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shortcut.cs" />
+    <Compile Include="FireUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="NodeNamesView.xaml">

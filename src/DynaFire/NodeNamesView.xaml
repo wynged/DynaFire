@@ -28,9 +28,7 @@
             <TextBox    Name="SearchBox" 
                         Width="150"
                         Text="{Binding Path=SearchString, UpdateSourceTrigger =PropertyChanged}"
-
                         />
-
         </StackPanel>
         <ListBox 
             Name="NodesToShow"

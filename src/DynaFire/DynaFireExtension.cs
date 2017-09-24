@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using Dynamo.UI.Commands;
 using System.ComponentModel;
+using Dynamo.Views;
 
 namespace DynaFire
 {
@@ -173,17 +174,33 @@ namespace DynaFire
                         v.ShowDialog();
                     }
 
-                    string nodeName = GetVal(NodeShortcuts, key);
-                    if (nodeName != null)
-                    {
-                        DynamoViewModel vm = view.DataContext as DynamoViewModel;
-                        vm.Model.ExecuteCommand(new CreateNodeCommand(Guid.NewGuid().ToString(), nodeName, 0, 0, false, true));
-                    }
+                    TryAndPlaceNode(key);
                 }
             }
         }
 
-        private string GetVal(ObservableCollection<Shortcut> collection, string key)
+        private void TryAndPlaceNode(string key)
+        {
+            string nodeName = GetNodeNameFromKeysEntered(NodeShortcuts, key);
+            if (nodeName != null)
+            {
+                DynamoViewModel vm = view.DataContext as DynamoViewModel;
+                System.Windows.Point pnt;
+
+                try
+                {
+                    WorkspaceView wsV = view.ChildOfType<WorkspaceView>();
+                    pnt = Mouse.GetPosition(wsV);
+                }
+                catch (Exception)
+                {
+                    pnt = new System.Windows.Point(0,0);
+                }
+                vm.Model.ExecuteCommand(new CreateNodeCommand(Guid.NewGuid().ToString(), nodeName, pnt.X, pnt.Y, false, true));
+            }
+        }
+
+        private string GetNodeNameFromKeysEntered(ObservableCollection<Shortcut> collection, string key)
         {
             Shortcut target = collection.FirstOrDefault(s => s.Keys.Equals(key));
             return target != null ? target.NodeName : null;
