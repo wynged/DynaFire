@@ -8,27 +8,44 @@ using static Dynamo.Models.DynamoModel;
 
 using System.Collections.Generic;
 
-
 using System.Windows.Input;
 using Dynamo.UI.Commands;
+using System.ComponentModel;
 
 namespace DynaFire
 {
-    public class DynaFireExtension : IViewExtension
+    public class DynaFireExtension : IViewExtension, INotifyPropertyChanged
     {
+        private string _searchString;
+        public string SearchString
+        {
+            get
+            {
+                return _searchString;
+            }
+            set
+            {
+                _searchString = value;
+                RaisePropertyChangedHere("NodeShortcuts");
+            }
+        }
 
-        private ObservableCollection<Shortcut> _nodeNames = new ObservableCollection<Shortcut>();
         private string ShortcutsFileName = "shortcuts.txt";
+
+        private ObservableCollection<Shortcut> _nodeShortcuts = new ObservableCollection<Shortcut>();
         public ObservableCollection<Shortcut> NodeShortcuts
         {
             get
             {
-                return _nodeNames;
+                if (string.IsNullOrWhiteSpace(SearchString))
+                {
+                    return _nodeShortcuts;
+                }
+                return new ObservableCollection<Shortcut>(_nodeShortcuts.Where(n => n.NodeName.ToUpper().Contains(SearchString.ToUpper())));
             }
             set
             {
-                _nodeNames = value;
-
+                _nodeShortcuts = value;
             }
         }
 
@@ -56,6 +73,8 @@ namespace DynaFire
         DynamoView view;
         char? lastChar;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public void SaveAllShortcuts()
         {
             List<Shortcut> assignedShortcuts = NodeShortcuts.Where(s => String.IsNullOrEmpty(s.Keys)).ToList();
@@ -70,29 +89,37 @@ namespace DynaFire
 
             SetNodeShortcuts();
             ReadFile();
+        }
 
-            
+        private void RaisePropertyChangedHere(string propertyName)
+        {
+            Console.WriteLine("property change event called");
+            if (this.PropertyChanged != null)
+            {
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                Console.WriteLine("property change event triggered");
+            }
         }
 
         private void SetNodeShortcuts()
         {
             DynamoViewModel vm = view.DataContext as DynamoViewModel;
-            NodeShortcuts = new ObservableCollection<Shortcut>();
-            foreach( string name in  vm.SearchViewModel.Model.SearchEntries.Select(s => s.CreationName) )
+            _nodeShortcuts = new ObservableCollection<Shortcut>();
+            foreach (string name in vm.SearchViewModel.Model.SearchEntries.Select(s => s.CreationName))
             {
-                NodeShortcuts.Add(new Shortcut("", name));
+                _nodeShortcuts.Add(new Shortcut("", name));
             }
         }
 
         internal void ClearKeys()
         {
-            foreach(Shortcut sc in NodeShortcuts)
+            foreach (Shortcut sc in NodeShortcuts)
             {
                 sc.Keys = "";
             }
         }
 
-        internal  void ReadFile()
+        internal void ReadFile()
         {
             try
             {
@@ -103,14 +130,15 @@ namespace DynaFire
                         string[] shortcutParts = stream.ReadLine().Split(new char[1] { '|' });
                         string nodeName = shortcutParts[1];
                         Shortcut target = NodeShortcuts.FirstOrDefault(s => s.NodeName.Equals(nodeName));
-                        if(target != null) {
+                        if (target != null)
+                        {
                             target.Keys = shortcutParts[0];
                         }
                     }
                 }
 
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 // haha
             }
@@ -155,12 +183,14 @@ namespace DynaFire
             }
         }
 
-        private string GetVal(ObservableCollection<Shortcut> collection, string key) {
+        private string GetVal(ObservableCollection<Shortcut> collection, string key)
+        {
             Shortcut target = collection.FirstOrDefault(s => s.Keys.Equals(key));
             return target != null ? target.NodeName : null;
         }
 
-        internal void WriteShortcutsToFile() {
+        internal void WriteShortcutsToFile()
+        {
             // First clear all the existing contents so we don't write duplicates
             System.IO.File.WriteAllText(ShortcutsFileName, string.Empty);
 
@@ -171,8 +201,8 @@ namespace DynaFire
                 {
                     if (!shortcut.Keys.Equals(""))
                     {
-                      string shcut = shortcut.Keys + "|" + shortcut.NodeName + "|";
-                      shortcutsFile.WriteLine(shcut);
+                        string shcut = shortcut.Keys + "|" + shortcut.NodeName + "|";
+                        shortcutsFile.WriteLine(shcut);
                     }
                 }
             }

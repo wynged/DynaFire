@@ -5,7 +5,7 @@
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
             xmlns:local="clr-namespace:DynaFire"
             mc:Ignorable="d" 
-            d:DesignHeight="300" Width="200"
+            d:DesignHeight="350" Width="300"
             xmlns:ui="clr-namespace:Dynamo.UI;assembly=DynamoCoreWpf"
         >
     <Window.Resources>
@@ -21,10 +21,20 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Assign Shortcut Keys" 
-                   Grid.Row="0"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <TextBlock  Text="Assign Shortcut Keys" 
+                        Width="150"
+                        />
+            <TextBox    Name="SearchBox" 
+                        Width="150"
+                        Text="{Binding Path=SearchString, UpdateSourceTrigger =PropertyChanged}"
+
+                        />
+
+        </StackPanel>
         <ListBox 
-            ItemsSource="{Binding NodeShortcuts}" 
+            Name="NodesToShow"
+            ItemsSource="{Binding NodeShortcuts}"
             Grid.Row="1">
             <ListBox.ItemTemplate>
                 <DataTemplate>
