@@ -218,7 +218,7 @@ namespace DynaFire
                 {
                     if (!shortcut.Keys.Equals(""))
                     {
-                        string shcut = shortcut.Keys + "|" + shortcut.NodeName + "|";
+                        string shcut = shortcut.Keys.ToUpper() + "|" + shortcut.NodeName + "|";
                         shortcutsFile.WriteLine(shcut);
                     }
                 }

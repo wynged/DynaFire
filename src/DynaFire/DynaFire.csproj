@@ -32,9 +32,11 @@
   <ItemGroup>
     <Reference Include="DynamoCore">
       <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\1.3\DynamoCore.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="DynamoCoreWpf">
       <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\1.3\DynamoCoreWpf.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
