@@ -230,4 +230,4 @@ UpgradeLog*.htm
 *.opt
 
 
-! deploy/
+! **/deploy/
