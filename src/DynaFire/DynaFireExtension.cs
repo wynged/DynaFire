@@ -199,7 +199,7 @@ namespace DynaFire
                     double scale = wsV.ViewModel.Zoom;
                     double X = wsV.ViewModel.Model.X;
                     double Y = wsV.ViewModel.Model.Y;
-                    adjusted = new System.Windows.Point( pnt.X * scale + X, pnt.Y*scale + Y);
+                    adjusted = new System.Windows.Point( pnt.X / scale - X/scale, pnt.Y/scale - Y/scale);
                 }
                 catch (Exception)
                 {
