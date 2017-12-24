@@ -13,7 +13,7 @@ namespace DynaFire
 
         /// <summary>
         /// Finds a Child of a given item in the visual tree. 
-        /// Stoled directly from dynamo 
+        /// Stolen directly from dynamo 
         /// </summary>
         /// <param name="parent">A direct parent of the queried item.</param>
         /// <typeparam name="T">The type of the queried item.</typeparam>

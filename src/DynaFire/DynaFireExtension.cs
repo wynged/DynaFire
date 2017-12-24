@@ -12,6 +12,7 @@ using System.Windows.Input;
 using Dynamo.UI.Commands;
 using System.ComponentModel;
 using Dynamo.Views;
+using System.IO;
 
 namespace DynaFire
 {
@@ -31,7 +32,9 @@ namespace DynaFire
             }
         }
 
-        private string ShortcutsFileName = "shortcuts.txt";
+        private string ShortcutsFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                                                        "DynaFire", 
+                                                        "shortcuts.txt");
 
         private ObservableCollection<Shortcut> _nodeShortcuts = new ObservableCollection<Shortcut>();
         public ObservableCollection<Shortcut> NodeShortcuts
@@ -148,7 +151,6 @@ namespace DynaFire
         private void View_KeyUp(object sender, KeyEventArgs e)
         {
             lastChar = null;
-
         }
 
         private void View_KeyDown(object sender, KeyEventArgs e)
@@ -172,9 +174,11 @@ namespace DynaFire
                     {
                         NodeNamesView v = new NodeNamesView(this);
                         v.ShowDialog();
+                        lastChar = null;
                     }
 
                     TryAndPlaceNode(key);
+                    lastChar = null;
                 }
             }
         }
@@ -186,17 +190,23 @@ namespace DynaFire
             {
                 DynamoViewModel vm = view.DataContext as DynamoViewModel;
                 System.Windows.Point pnt;
-
+                System.Windows.Point adjusted = new System.Windows.Point(0,0);
                 try
                 {
+                    //todo playl with how to apply the scale and x/y values.  x/y kind works
                     WorkspaceView wsV = view.ChildOfType<WorkspaceView>();
                     pnt = Mouse.GetPosition(wsV);
+                    double scale = wsV.ViewModel.Zoom;
+                    double X = wsV.ViewModel.Model.X;
+                    double Y = wsV.ViewModel.Model.Y;
+                    adjusted = new System.Windows.Point( pnt.X * scale + X, pnt.Y*scale + Y);
                 }
                 catch (Exception)
                 {
                     pnt = new System.Windows.Point(0,0);
                 }
-                vm.Model.ExecuteCommand(new CreateNodeCommand(Guid.NewGuid().ToString(), nodeName, pnt.X, pnt.Y, false, true));
+                //todo play with wehter or not to transform mcoordinates.
+                vm.Model.ExecuteCommand(new CreateNodeCommand(Guid.NewGuid().ToString(), nodeName, adjusted.X, adjusted.Y, false, false));
             }
         }
 
@@ -209,10 +219,10 @@ namespace DynaFire
         internal void WriteShortcutsToFile()
         {
             // First clear all the existing contents so we don't write duplicates
-            System.IO.File.WriteAllText(ShortcutsFileName, string.Empty);
+            File.WriteAllText(ShortcutsFileName, string.Empty);
 
             // Then write all shortcuts with non-empty keys to the File
-            using (System.IO.StreamWriter shortcutsFile = new System.IO.StreamWriter(ShortcutsFileName))
+            using (StreamWriter shortcutsFile = new System.IO.StreamWriter(ShortcutsFileName))
             {
                 foreach (Shortcut shortcut in NodeShortcuts)
                 {
