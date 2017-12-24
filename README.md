@@ -1,11 +1,18 @@
-# DynaFire
+## DynaFire
 Dynamo Keyboard Shortcuts Extension
 
-This addin should help users add customizable shortucts to DynamoBIM, a visual programing language for the AEC industry. 
-Autodesk is working on the open source project to encourage automation, but they needed a little help adding the shortcut functionality.
-This project was started at the #beyondAEC hackathon, held in Boston.
+## Purpose/Use
+Create shortcuts to place commonly used nodes in the workspace.
+Shortcuts are 2 letter combinations, press and hold the first letter while pressing the second.  
+For example, press 'K', hold it down, then press 'S'.  This opens the keyboard shortcut editing dialog.
 
-the solution should compile, and the goal is that if all you want is to add the extension, then the deploy folder should have all you need.
+## Install
+Download atleast the deploy folder.  There is an install bat file that should install the extension, and place a starting saved shortcut file into a user app data folder.  *%AppData&\DynaFire\*
+
+## Resources
+Dynamo source code  - https://github.com/DynamoDS/Dynamo 
+
+This project was started at the #beyondAEC hackathon, held in Boston.
 
 Note, this is very much a work in progress.  At the time of this writing there are known issues which WILL cause Dynamo to crash.
 Use at your own risk, and please contribute.  We all want this project to get better :-)
