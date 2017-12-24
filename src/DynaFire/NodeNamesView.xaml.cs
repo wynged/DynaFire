@@ -32,6 +32,8 @@ namespace DynaFire
         private void Button_Click_Save(object sender, RoutedEventArgs e)
         {
             model.WriteShortcutsToFile();
+            model.ClearKeys();
+            model.ReadFile();
         }
 
         private void Button_Click_Cancel(object sender, RoutedEventArgs e)

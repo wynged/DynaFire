@@ -79,11 +79,12 @@ namespace DynaFire
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void SaveAllShortcuts()
-        {
-            List<Shortcut> assignedShortcuts = NodeShortcuts.Where(s => String.IsNullOrEmpty(s.Keys)).ToList();
+        //todo delete me
+        //public void SaveAllShortcuts()
+        //{
+        //    List<Shortcut> assignedShortcuts = NodeShortcuts.Where(s => String.IsNullOrEmpty(s.Keys)).ToList();
 
-        }
+        //}
 
         public void Loaded(ViewLoadedParams p)
         {
@@ -91,7 +92,7 @@ namespace DynaFire
             view.KeyDown += View_KeyDown;
             view.KeyUp += View_KeyUp;
 
-            SetNodeShortcuts();
+            InitialSetOfAllNodeShortcuts();
             ReadFile();
         }
 
@@ -105,7 +106,7 @@ namespace DynaFire
             }
         }
 
-        private void SetNodeShortcuts()
+        private void InitialSetOfAllNodeShortcuts()
         {
             DynamoViewModel vm = view.DataContext as DynamoViewModel;
             _nodeShortcuts = new ObservableCollection<Shortcut>();
@@ -127,7 +128,7 @@ namespace DynaFire
         {
             try
             {
-                using (System.IO.StreamReader stream = new System.IO.StreamReader(ShortcutsFileName))
+                using (StreamReader stream = new StreamReader(ShortcutsFileName))
                 {
                     while (!stream.EndOfStream)
                     {
@@ -136,7 +137,7 @@ namespace DynaFire
                         Shortcut target = NodeShortcuts.FirstOrDefault(s => s.NodeName.Equals(nodeName));
                         if (target != null)
                         {
-                            target.Keys = shortcutParts[0];
+                            target.Keys = shortcutParts[0].ToUpper();
                         }
                     }
                 }
@@ -212,7 +213,7 @@ namespace DynaFire
 
         private string GetNodeNameFromKeysEntered(ObservableCollection<Shortcut> collection, string key)
         {
-            Shortcut target = collection.FirstOrDefault(s => s.Keys.Equals(key));
+            Shortcut target = collection.FirstOrDefault(s => s.Keys.Equals(key.ToUpper()));
             return target != null ? target.NodeName : null;
         }
 
