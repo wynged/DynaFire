@@ -206,8 +206,16 @@ namespace DynaFire
                 {
                     pnt = new System.Windows.Point(0,0);
                 }
-                //todo play with wehter or not to transform mcoordinates.
-                vm.Model.ExecuteCommand(new CreateNodeCommand(Guid.NewGuid().ToString(), nodeName, adjusted.X, adjusted.Y, false, false));
+                try
+                {
+                    vm.Model.ExecuteCommand(new CreateNodeCommand(Guid.NewGuid().ToString(), nodeName, adjusted.X, adjusted.Y, false, false));
+                }
+                catch
+                {
+                    
+                }
+
+
             }
         }
 
@@ -223,8 +231,9 @@ namespace DynaFire
             File.WriteAllText(ShortcutsFileName, string.Empty);
 
             // Then write all shortcuts with non-empty keys to the File
-            using (StreamWriter shortcutsFile = new System.IO.StreamWriter(ShortcutsFileName))
+            using (StreamWriter shortcutsFile = new StreamWriter(ShortcutsFileName))
             {
+                SearchString = "";
                 foreach (Shortcut shortcut in NodeShortcuts)
                 {
                     if (!shortcut.Keys.Equals(""))
