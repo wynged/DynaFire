@@ -9,7 +9,7 @@ For example, press 'K', hold it down, then press 'S'.  This opens the keyboard s
 ## Install
 Inside the deploy folder there is an install bat file that should install the extension.  If you don't want to download the whole repo use this link [DeployFolder](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/wynged/DynaFire/tree/master/deploy) to download just the deploy folder. If you use this link, you'll probably need to right click on the zip file, select properties, and then check "unblock" to allow the code to run.
 
-The installer also places a starting saved shortcut file into a user app data folder.  *%AppData&\DynaFire\*  This sortcut file contains all of your customized shortcuts.
+The installer also places a starting saved shortcut file into a user app data folder.  *%AppData&\DynaFire\*  This shortcut file contains all of your customized shortcuts.
 
 ## Resources
 Dynamo source code  - https://github.com/DynamoDS/Dynamo 
